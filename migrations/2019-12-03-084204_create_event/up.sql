@@ -1,0 +1,7 @@
+CREATE TABLE events (
+  id VARCHAR NOT NULL PRIMARY KEY,
+  content TEXT NOT NULL,
+  finished BOOLEAN NOT NULL,
+  created_at DATETIME NOT NULL,
+  updated_at DATETIME NOT NULL
+)
