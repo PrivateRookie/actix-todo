@@ -46,15 +46,16 @@ pub fn create_event(
     Ok(HttpResponse::Ok().json(new_user))
 }
 
-pub fn list_events(pool: web::Data<Pool>) -> HttpResponse {
+pub fn list_events(pool: web::Data<Pool>) -> Result<HttpResponse, Error> {
     use self::schema::events::dsl::*;
-    let results = events
-        .load::<models::Event>(&pool.get().unwrap())
-        .expect("failed to list events");
-    HttpResponse::Ok().json(results)
+    let results = events.load::<models::Event>(&pool.get().unwrap()).unwrap();
+    Ok(HttpResponse::Ok().json(results))
 }
 
-pub fn update_event(item: web::Json<UpdateEventContent>, pool: web::Data<Pool>) -> HttpResponse {
+pub fn update_event(
+    item: web::Json<UpdateEventContent>,
+    pool: web::Data<Pool>,
+) -> Result<HttpResponse, Error> {
     use self::schema::events::dsl::*;
     let record = events
         .filter(uid.eq(&item.uid))
@@ -68,16 +69,19 @@ pub fn update_event(item: web::Json<UpdateEventContent>, pool: web::Data<Pool>) 
             updated_at.eq(item.updated_at),
         ))
         .execute(&pool.get().unwrap())
-        .expect("failed to update event");
+        .unwrap();
 
-    HttpResponse::Ok().json(record)
+    Ok(HttpResponse::Ok().json(record))
 }
 
-pub fn delete_event(item: web::Json<UpdateEventContent>, pool: web::Data<Pool>) -> HttpResponse {
+pub fn delete_event(
+    item: web::Json<UpdateEventContent>,
+    pool: web::Data<Pool>,
+) -> Result<HttpResponse, Error> {
     use self::schema::events::dsl::*;
 
     diesel::delete(events.filter(uid.eq(&item.uid)))
         .execute(&pool.get().unwrap())
-        .expect("failed to delete event");
-    HttpResponse::Ok().json({})
+        .unwrap();
+    Ok(HttpResponse::Ok().json({}))
 }
