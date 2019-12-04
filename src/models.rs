@@ -15,8 +15,9 @@ pub struct Event {
 #[derive(Serialize, Deserialize, Debug, Insertable)]
 #[table_name = "events"]
 pub struct NewEvent {
-    pub uid: String,
+    pub uid: Option<String>,
     pub content: String,
+    #[serde(default)]
     pub finished: bool,
     #[serde(default = "super::api::naivedate_now")]
     pub created_at: NaiveDateTime,
