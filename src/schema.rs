@@ -1,6 +1,7 @@
 table! {
     events (id) {
-        id -> Text,
+        id -> Integer,
+        uid -> Text,
         content -> Text,
         finished -> Bool,
         created_at -> Timestamp,
