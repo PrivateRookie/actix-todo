@@ -18,8 +18,8 @@ pub struct NewEvent {
     pub uid: String,
     pub content: String,
     pub finished: bool,
-    #[serde(default = "super::naivedate_now")]
+    #[serde(default = "super::api::naivedate_now")]
     pub created_at: NaiveDateTime,
-    #[serde(default = "super::naivedate_now")]
+    #[serde(default = "super::api::naivedate_now")]
     pub updated_at: NaiveDateTime,
 }
