@@ -23,6 +23,8 @@ fn main() -> std::io::Result<()> {
         .build(manager)
         .expect("Failed to create pool.");
 
+    let addr = std::env::var("SERVE_ADDR")
+        .unwrap_or("127.0.0.1:8080".to_string());
     HttpServer::new(move || {
         App::new()
             .data(pool.clone())
@@ -36,6 +38,6 @@ fn main() -> std::io::Result<()> {
             )
             .service(fs::Files::new("/static", "./static").index_file("index.html"))
     })
-    .bind("127.0.0.1:8080")?
+    .bind(addr)?
     .run()
 }
