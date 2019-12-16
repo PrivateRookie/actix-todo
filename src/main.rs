@@ -4,7 +4,7 @@ extern crate diesel;
 extern crate serde_derive;
 
 use actix_files as fs;
-use actix_web::{middleware, web, App, HttpServer};
+use actix_web::{middleware, web, App, HttpServer, Result};
 use diesel::prelude::*;
 use diesel::r2d2::{self, ConnectionManager};
 use dotenv;
@@ -12,6 +12,14 @@ use dotenv;
 mod api;
 mod models;
 mod schema;
+
+fn index() -> Result<fs::NamedFile> {
+    Ok(fs::NamedFile::open("./static/index.html")?)
+}
+
+fn icon() -> Result<fs::NamedFile> {
+    Ok(fs::NamedFile::open("./static/favicon.ico")?)
+}
 
 fn main() -> std::io::Result<()> {
     dotenv::dotenv().ok();
@@ -35,7 +43,13 @@ fn main() -> std::io::Result<()> {
                     .route(web::put().to_async(api::update_event))
                     .route(web::delete().to_async(api::delete_event)),
             )
-            .service(fs::Files::new("/static", "./static").index_file("index.html"))
+            .service(web::resource("/").route(web::get().to(index)))
+            .service(web::resource("/favicon.ico").route(web::get().to(icon)))
+            .service(
+                fs::Files::new("/static", "./static")
+                    .redirect_to_slash_directory()
+                    .show_files_listing(),
+            )
     })
     .bind(addr)?
     .run()

@@ -1,10 +1,13 @@
 # actix-todo
 todo demo app power by actix-web
 
+![sample](static/smple.png)
+
 power by:
 
 - [actix-web](https://actix.rs/)
 - [diesel](http://diesel.rs/guides/getting-started/)
+- react
 
 ## install
 
@@ -71,5 +74,5 @@ curl --request DELETE \
 ## TODO 
 
 - [ ] add unit test
-- [ ] add gui
+- [x] add gui
 - [ ] add Dockerfile
